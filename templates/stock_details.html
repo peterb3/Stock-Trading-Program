@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Stock Details</h1>
+    <h2>{{ symbol }} - ${{ price }}</h2>
+    <div>
+        <h3>Buy {{ symbol }}</h3>
+        <form method="POST" action="/buy">
+            <input type="hidden" name="symbol" value="{{ symbol }}">
+            <div>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" min="1" required>
+            </div>
+            <div>
+                <button type="submit">Buy</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h3>Sell {{ symbol }}</h3>
+        <form method="POST" action="/sell">
+            <input type="hidden" name="symbol" value="{{ symbol }}">
+            <div>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" min="1" required>
+            </div>
+            <div>
+                <button type="submit">Sell</button>
+            </div>
+        </form>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <a href="{{ url_for('trade') }}">Back to Trade</a>
+</body>
+</html>
