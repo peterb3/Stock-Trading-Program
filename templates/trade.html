@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Stocks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Trade Stocks</h1>
+    <div>
+        <h3>Search Stock</h3>
+        <form method="POST" action="/search">
+            <div>
+                <label for="symbol">Stock Symbol:</label>
+                <input type="text" name="symbol" required>
+            </div>
+            <div>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <a href="{{ url_for('index') }}">Back to Portfolio</a>
+</body>
+</html>
