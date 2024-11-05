@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Help{% endblock %}
+{% block content %}
+<h1 class="mt-4">Help</h1>
+<div class="card mt-4">
+    <div class="card-body">
+        <h2>How to Use the App</h2>
+        <p>Welcome to the Stock App! Here’s a quick guide on how to use the app:</p>
+        <ul>
+            <li><strong>Portfolio:</strong> View your current balance and stock holdings.</li>
+            <li><strong>Trade:</strong> Search for stocks to buy or sell.</li>
+        </ul>
+        <h3>Stock Trading Basics</h3>
+        <p>Understanding how to buy and sell stocks is key to using this app effectively. Here’s a brief overview:</p>
+        <div class="accordion" id="tradingAccordion">
+            <div class="card">
+                <div class="card-header" id="buyingStocks">
+                    <h4 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBuy" aria-expanded="true" aria-controls="collapseBuy">
+                            How to Buy Stocks
+                        </button>
+                    </h4>
+                </div>
+                <div id="collapseBuy" class="collapse show" aria-labelledby="buyingStocks" data-parent="#tradingAccordion">
+                    <div class="card-body">
+                        <p>To buy stocks, follow these steps:</p>
+                        <ul>
+                            <li>Go to the 'Trade' page.</li>
+                            <li>Enter the stock symbol you want to buy.</li>
+                            <li>Enter the quantity of stocks you want to purchase.</li>
+                            <li>Click 'Buy' to complete the transaction.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="sellingStocks">
+                    <h4 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSell" aria-expanded="false" aria-controls="collapseSell">
+                            How to Sell Stocks
+                        </button>
+                    </h4>
+                </div>
+                <div id="collapseSell" class="collapse" aria-labelledby="sellingStocks" data-parent="#tradingAccordion">
+                    <div class="card-body">
+                        <p>To sell stocks, follow these steps:</p>
+                        <ul>
+                            <li>Go to the 'Trade' page.</li>
+                            <li>Enter the stock symbol you want to sell.</li>
+                            <li>Enter the quantity of stocks you want to sell.</li>
+                            <li>Click 'Sell' to complete the transaction.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>Further Reading</h3>
+        <p>Here are some additional resources to learn more about stock trading:</p>
+        <ul>
+            <li><a href="https://www.investopedia.com/stock-trading-4427789" target="_blank">Investopedia - Stock Trading</a></li>
+            <li><a href="https://www.fool.com/how-to-invest/stocks/" target="_blank">The Motley Fool - How to Invest in Stocks</a></li>
+            <li><a href="https://www.finra.org/investors/learn-to-invest/types-investments/stocks" target="_blank">FINRA - Stocks</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

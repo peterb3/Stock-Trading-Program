@@ -35,6 +35,10 @@ def search():
     symbol = request.form.get('symbol').upper()
     return redirect(url_for('stock_details', symbol=symbol))
 
+@app.route("/help")
+def help():
+    return render_template('help.html')
+
 @app.route("/stock/<symbol>")
 def stock_details(symbol):
     price = StockService.get_stock_price(symbol)
