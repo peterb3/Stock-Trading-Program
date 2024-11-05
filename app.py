@@ -78,6 +78,7 @@ def sell():
 
 if __name__ == "__main__":
     with app.app_context():
+        db.drop_all() #drop tables at beginning for development, remove for persistence
         db.create_all()
         if not Stock.query.first():
             stock = Stock(symbol="AAPL", purchase_price=StockService.get_stock_price('AAPL'), quantity=1)
