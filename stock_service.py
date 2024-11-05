@@ -1,4 +1,4 @@
-from polygon import RESTClient
+import requests
 import os
 
 class StockService:
@@ -6,8 +6,9 @@ class StockService:
 
     @staticmethod
     def get_stock_price(symbol):
-        client = RESTClient(StockService.API_KEY)
+        url = f"https://api.stockdata.org/v1/data/quote?symbols={symbol}&api_token={StockService.API_KEY}"
         
-        last_trade = client.get_last_trade(symbol,)
+        response = requests.get(url)
+        data = response.json()
 
-        return last_trade.price
+        return data['data'][0]['price']
