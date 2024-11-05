@@ -1,5 +1,8 @@
 import requests
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 class StockService:
     API_KEY = os.environ.get('STOCK_API_KEY')
@@ -11,4 +14,4 @@ class StockService:
         response = requests.get(url)
         data = response.json()
 
-        return data['data'][0]['price']
+        return float(data['data'][0]['price'])

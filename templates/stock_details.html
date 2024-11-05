@@ -1,47 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <h1>Stock Details</h1>
-    <h2>{{ symbol }} - ${{ price }}</h2>
-    <div>
-        <h3>Buy {{ symbol }}</h3>
-        <form method="POST" action="/buy">
-            <input type="hidden" name="symbol" value="{{ symbol }}">
-            <div>
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" min="1" required>
-            </div>
-            <div>
-                <button type="submit">Buy</button>
-            </div>
-        </form>
+{% extends "base.html" %}
+{% block title %}Stock Details{% endblock %}
+{% block content %}
+<h1 class="mt-4">Stock Details</h1>
+<div class="card mt-4">
+    <div class="card-body">
+        <h2>{{ symbol }} - ${{ price }}</h2>
+        <div class="mt-4">
+            <h3>Buy {{ symbol }}</h3>
+            <form method="POST" action="/buy">
+                <input type="hidden" name="symbol" value="{{ symbol }}">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-success">Buy</button>
+            </form>
+        </div>
+        <div class="mt-4">
+            <h3>Sell {{ symbol }}</h3>
+            <form method="POST" action="/sell">
+                <input type="hidden" name="symbol" value="{{ symbol }}">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Sell</button>
+            </form>
+        </div>
     </div>
-    <div>
-        <h3>Sell {{ symbol }}</h3>
-        <form method="POST" action="/sell">
-            <input type="hidden" name="symbol" value="{{ symbol }}">
-            <div>
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" min="1" required>
-            </div>
-            <div>
-                <button type="submit">Sell</button>
-            </div>
-        </form>
-    </div>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <a href="{{ url_for('trade') }}">Back to Trade</a>
-</body>
-</html>
+</div>
+<a href="{{ url_for('trade') }}" class="btn btn-secondary mt-4">Back to Trade</a>
+{% endblock %}
