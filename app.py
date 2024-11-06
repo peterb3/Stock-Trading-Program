@@ -16,19 +16,19 @@ db.init_app(app)
 def index():
     stock = Stock.query.first()
     balance = Balance.query.first()
+    if not stock or not balance:
+        flash('No stock or balance data available.', 'danger')
     return render_template('index.html', stock=stock, balance=balance)
 
 @app.route("/trade", methods = ['GET', 'POST'])
 def trade():
-    stock = Stock.query.first()
-    balance = Balance.query.first()
     if request.method == 'POST' and request.form.get('action') == 'search':
         symbol = request.form.get('symbol').upper().strip()
         if not symbol.isalpha():
             flash('Invalid stock symbol. Please enter a valid symbol.', 'danger')
             return redirect(url_for('trade'))
         return redirect(url_for('stock_details', symbol=symbol))
-    return render_template('trade.html', stock=stock, balance=balance)
+    return render_template('trade.html')
 
 @app.route("/search", methods=['POST'])
 def search():
@@ -41,9 +41,13 @@ def help():
 
 @app.route("/stock/<symbol>")
 def stock_details(symbol):
-    price = StockService.get_stock_price(symbol)
-    if price is None:
-        flash(f'Failed to fetch price for stock {symbol}. Please try again.', 'danger')
+    try:
+        price = StockService.get_stock_price(symbol)
+        if price is None:
+            flash(f'Failed to fetch price for stock {symbol}. Please try again.', 'danger')
+            return redirect(url_for('trade'))
+    except Exception as e:
+        flash(f'Error fetching stock ticker: {e}', 'danger')
         return redirect(url_for('trade'))
     return render_template('stock_details.html', symbol=symbol, price=price)
 
@@ -118,9 +122,12 @@ if __name__ == "__main__":
         db.drop_all() #drop tables at beginning for development, remove for persistence
         db.create_all()
         if not Stock.query.first():
-            price = StockService.get_stock_price('AAPL')
-            stock = Stock(symbol="AAPL", purchase_price=price, quantity=1)
-            db.session.add(stock)
-            db.session.add(Balance(amount=10000.00))
-            db.session.commit()
+            try:
+                price = StockService.get_stock_price('AAPL')
+                stock = Stock(symbol="AAPL", purchase_price=price, quantity=1)
+                db.session.add(stock)
+                db.session.add(Balance(amount=10000.00))
+                db.session.commit()
+            except Exception as e:
+                print(f"Error initializing the database: {e}")
     app.run(debug=True)

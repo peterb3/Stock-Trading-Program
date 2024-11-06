@@ -40,5 +40,29 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function prepareBuyModal() {
+            var quantity = document.getElementById("buyQuantity").value;
+            var price = {{ price }};
+            var totalCost = quantity * price;
+            document.getElementById("confirmationMessage").innerText = 
+                `Are you sure you want to buy ${quantity} shares? It will cost $${totalCost.toFixed(2)}.`;
+            document.getElementById("confirmButton").onclick = function() {
+                document.getElementById("buyForm").submit();
+            };
+        }
+        
+        function prepareSellModal() {
+            var quantity = document.getElementById("sellQuantity").value;
+            var price = {{ price }};
+            var totalProceeds = quantity * price;
+            document.getElementById("confirmationMessage").innerText = 
+                `Are you sure you want to sell ${quantity} shares? You will receive $${totalProceeds.toFixed(2)}.`;
+            document.getElementById("confirmButton").onclick = function() {
+                document.getElementById("sellForm").submit();
+            };
+        }
+        </script>        
 </body>
 </html>
