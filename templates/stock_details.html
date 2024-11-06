@@ -7,27 +7,47 @@
         <h2>{{ symbol }} - ${{ price }}</h2>
         <div class="mt-4">
             <h3>Buy {{ symbol }}</h3>
-            <form method="POST" action="/buy">
+            <form method="POST" action="/buy" id="buyForm">
                 <input type="hidden" name="symbol" value="{{ symbol }}">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" name="quantity" class="form-control" min="1" required>
+                    <input type="number" name="quantity" class="form-control" min="1" id="buyQuantity" required>
                 </div>
-                <button type="submit" class="btn btn-success">Buy</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#confirmationModal" onclick="prepareBuyModal()">Buy</button>
             </form>
         </div>
         <div class="mt-4">
             <h3>Sell {{ symbol }}</h3>
-            <form method="POST" action="/sell">
+            <form method="POST" action="/sell" id="sellForm">
                 <input type="hidden" name="symbol" value="{{ symbol }}">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" name="quantity" class="form-control" min="1" required>
+                    <input type="number" name="quantity" class="form-control" min="1" id="sellQuantity" required>
                 </div>
-                <button type="submit" class="btn btn-danger">Sell</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationModal" onclick="prepareSellModal()">Sell</button>
             </form>
         </div>
     </div>
 </div>
 <a href="{{ url_for('trade') }}" class="btn btn-secondary mt-4">Back to Trade</a>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirm Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="confirmButton">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
