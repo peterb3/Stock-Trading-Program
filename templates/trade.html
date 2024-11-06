@@ -5,9 +5,10 @@
 <div class="card mt-4">
     <div class="card-body">
         <h3>Search Stock</h3>
+        <p>Enter the ticker for a company's stock to see the current price and buy or sell that stock!</p>
         <form method="POST" action="/search">
             <div class="form-group">
-                <label for="symbol">Stock Symbol:</label>
+                <label for="symbol">Stock Symbol: </label>
                 <input type="text" name="symbol" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Search</button>

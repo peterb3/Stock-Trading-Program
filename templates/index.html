@@ -2,9 +2,12 @@
 {% block title %}Portfolio{% endblock %}
 {% block content %}
 <h1 class="mt-4">Welcome to the Stock App!</h1>
+<p>For more information on how to use the app or navigate the website, click on the help tab at the top of the screen for tips!</p>
 <div class="card mt-4">
     <div class="card-body">
+        <p>This represents your available money to buy stocks.</p>
         <h2>Current Balance: ${{ balance.amount }}</h2>
+        <p>The information below represents your owned stocks and how many of each you own.</p>
         <h2>{{ stock.symbol }}: {{ stock.quantity }} shares</h2>
     </div>
 </div>
