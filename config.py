@@ -1,5 +1,6 @@
 import os
 
+# Database and secret keys in a class to all be exposed together as needed for app
 class Config:
     SECRET_KEY = os.environ.get('FLASK_SECRET_KEY') or 'your_secret_key'
     STOCK_API_KEY = os.environ.get('STOCK_API_KEY')
