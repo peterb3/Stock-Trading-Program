@@ -23,6 +23,16 @@ class StockNewsService:
             return news.get('data', [])
         else:
             return []
+        
+class RandomStock:
+    def get_random_stock():
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect("tcp://localhost:6666")
+
+        socket.send_string("Request stock")
+        message = socket.recv_string()
+        return message
 
 # Iniitialize flask app and import config class with keys
 app = Flask(__name__)
@@ -54,6 +64,9 @@ def trade():
         if not symbol.isalpha():
             flash('Invalid stock symbol. Please enter a valid symbol.', 'danger')
             return redirect(url_for('trade'))
+        return redirect(url_for('stock_details', symbol=symbol))
+    elif request.method == 'POST' and request.form.get('action') == 'random':
+        symbol = RandomStock.get_random_stock()
         return redirect(url_for('stock_details', symbol=symbol))
     return render_template('trade.html')
 

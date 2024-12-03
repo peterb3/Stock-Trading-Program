@@ -16,5 +16,13 @@
         </form>
     </div>
 </div>
+<div class="card mt-4">
+    <div class="card-body">
+        <h3>Or Get a Random Stock Recommendation</h3>
+        <form method="POST" action="/trade">
+            <button type="submit" name="action" value="random" class="btn btn-success">I'm feeling lucky!</button>
+        </form>
+    </div>
+</div>
 <a href="{{ url_for('index') }}" class="btn btn-secondary mt-4">Back to Portfolio</a>
 {% endblock %}
