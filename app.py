@@ -33,6 +33,27 @@ class RandomStock:
         socket.send_string("Request stock")
         message = socket.recv_string()
         return message
+    
+class SaveStock:
+    def save_stock(symbol):
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect("tcp://localhost:5555")
+        
+        request_data = json.dumps({'action': 'store', 'ticker': symbol})
+        socket.send_string(request_data)
+        response = socket.recv_string()
+        return response
+    
+    def get_saved_stocks():
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect("tcp://localhost:5555")
+        
+        request_data = json.dumps({'action': 'retrieve'})
+        socket.send_string(request_data)
+        response = socket.recv_string()
+        return json.loads(response)
 
 # Iniitialize flask app and import config class with keys
 app = Flask(__name__)
@@ -68,7 +89,9 @@ def trade():
     elif request.method == 'POST' and request.form.get('action') == 'random':
         symbol = RandomStock.get_random_stock()
         return redirect(url_for('stock_details', symbol=symbol))
-    return render_template('trade.html')
+    
+    saved_stocks = SaveStock.get_saved_stocks()
+    return render_template('trade.html', saved_stocks=saved_stocks)
 
 # Routing for search form, with symbol validation. Redirects to stock_details.html.
 @app.route("/search", methods=['POST'])
@@ -82,9 +105,14 @@ def help():
     return render_template('help.html')
 
 # Routing for stock_details page, populates the URL with the passed stock symbol. Error handling set up for invalid stock input, which returns to trade page.
-@app.route("/stock/<symbol>")
+@app.route("/stock/<symbol>", methods=['GET', 'POST'])
 def stock_details(symbol):
     try:
+        if request.method == 'POST' and request.form.get('form_type') == 'save':
+            SaveStock.save_stock(symbol)
+            flash(f'Stock {symbol} has been saved.', 'success')
+            return redirect(url_for('stock_details', symbol=symbol))
+
         price = StockService.get_stock_price(symbol)
         if price is None:
             flash(f'Failed to fetch price for stock {symbol}. Please try again.', 'danger')
