@@ -8,7 +8,26 @@
         <p>This represents your available money to buy stocks.</p>
         <h2>Current Balance: ${{ balance.amount }}</h2>
         <p>The information below represents your owned stocks and how many of each you own.</p>
-        <h2>{{ stock.symbol }}: {{ stock.quantity }} shares</h2>
+        {% if stocks %}
+            {% for stock in stocks %}
+                <h2>{{ stock.symbol }}: {{ stock.quantity }} shares</h2>
+                <h3>Latest News for {{ stock.symbol }}</h3>
+                {% if news_data[stock.symbol] %}
+                    <ul>
+                        {% for article in news_data[stock.symbol] %}
+                            <li>
+                                <a href="{{ article['url'] }}" target="_blank">{{ article['title'] }}</a>
+                                <p>{{ article['description'] }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No news available for {{ stock.symbol }}.</p>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>You do not own any stocks yet. Please add some to your portfolio.</p>
+        {% endif %}
     </div>
 </div>
 <a href="{{ url_for('trade') }}" class="btn btn-secondary mt-4">Get started! Make a trade</a>

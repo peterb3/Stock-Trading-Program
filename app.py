@@ -4,10 +4,26 @@ from models import db, Stock, Balance
 from stock_service import StockService
 from dotenv import load_dotenv
 import os
+import zmq
+import json
 
 # Import env variables so keys are available
 load_dotenv()
  
+class StockNewsService:
+    def get_stock_news(symbol):
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect("tcp://localhost:7777")
+
+        socket.send_string(json.dumps([symbol]))
+        message = socket.recv_string()
+        news = json.loads(message)
+        if 'data' in news and news['data']:
+            return news.get('data', [])
+        else:
+            return []
+
 # Iniitialize flask app and import config class with keys
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,11 +34,16 @@ db.init_app(app)
 # Routing for home page, pulls user db info, loading owned stocks and portfolio balance, routes to index.html
 @app.route("/")
 def index():
-    stock = Stock.query.first()
+    stocks = Stock.query.all()
     balance = Balance.query.first()
-    if not stock or not balance:
+    if not stocks or not balance:
         flash('No stock or balance data available.', 'danger')
-    return render_template('index.html', stock=stock, balance=balance)
+    news_data = {}
+    for s in stocks:
+        news = StockNewsService.get_stock_news(s.symbol)
+        if news:
+            news_data[s.symbol] = news
+    return render_template('index.html', stocks=stocks, balance=balance, news_data=news_data)
 
 # Routing for trade page, with get and post methods, for submitting the search form. Loads the trade.html page. Prepares stock ticker entry for proper format and validates.
 # Redirects to stock_details.html page with valid input.
@@ -55,10 +76,11 @@ def stock_details(symbol):
         if price is None:
             flash(f'Failed to fetch price for stock {symbol}. Please try again.', 'danger')
             return redirect(url_for('trade'))
+        news = StockNewsService.get_stock_news(symbol)
     except Exception as e:
         flash(f'Error fetching stock ticker: {e}', 'danger')
         return redirect(url_for('trade'))
-    return render_template('stock_details.html', symbol=symbol, price=price)
+    return render_template('stock_details.html', symbol=symbol, price=price, news=news)
 
 # Routing for buy form. Queries database to see if stock exists there to add to user account, otherwise it creates a new entry. Updates quantity owned, price,
 # and user balance. Error handling is set up to ensure you cannot buy more than balance in account, the stock is valid, and error with entering data does not

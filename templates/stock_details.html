@@ -28,6 +28,21 @@
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationModal" onclick="prepareSellModal()">Sell</button>
             </form>
         </div>
+        <div class="mt-4">
+            <h3>News for {{ symbol }}</h3>
+            {% if news %}
+                <ul>
+                    {% for article in news %}
+                        <li>
+                            <a href="{{ article['url'] }}" target="_blank">{{ article['title'] }}</a>
+                            <p>{{ article['description'] }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No news available for {{ symbol }}.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 <a href="{{ url_for('trade') }}" class="btn btn-secondary mt-4">Back to Trade</a>
